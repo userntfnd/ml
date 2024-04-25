@@ -44,34 +44,42 @@ model.evaluate(x_test,y_test)
 
 Expt 2 linear regression
 ```
+import pandas as pd
+from sklearn.linear_model import LinearRegression
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
 
-dataset =pd.read_csv('C:/Users/Zaurez/OneDrive/Documents/Desktop/to upload/Salary_dataset ML - Salary_dataset.csv')
+data = pd.read_csv("Salary_dataset.csv")
 
-X = dataset.iloc[:,0].values
-Y = dataset.iloc[:,1].values
+X = data.iloc[:, 0].values  # Convert X to a NumPy array
+y = data.iloc[:, 1].values  # Convert y to a NumPy array
 
-Z=X*Y
-X2 = X*X
-A = (len(X)*sum(Z)) - (sum(X)*sum(Y))  / (len(X)*sum(X2)) - (sum(X)*sum(X))
-B =  (sum(Y) - (A*sum(X)) / len(X))
+xy = X * y
+x_squared = X ** 2
 
-y_pred = []
-for i in range (len(X)):
-    y_pred.append((A*X) + B)
+n = len(data)
 
-from sklearn.linear_model import LinearRegression
-regressor = LinearRegression()
-regressor.fit(X.reshape(-1,1),Y)
+sum_y = sum(y)
+sum_x = sum(X)
+sum_x_squared = sum(x_squared)
+sum_xy = sum(xy)
 
-plt.plot(X.reshape(-1,1),regressor.predict(X.reshape(-1,1)) , color = 'blue' , label = 'best fit line')
-plt.scatter(X,Y,color ='red',label ="Predicted data")
-plt.title
-plt.xlabel
-plt.ylabel
-plt.show
+a = ((sum_y * sum_x_squared) - (sum_x * sum_xy)) / ((n * sum_x_squared) - sum_x ** 2)
+b = ((n * sum_xy) - (sum_x * sum_y)) / ((n * sum_x_squared) - sum_x ** 2)
+
+x_test = [1.7, 2.5, 6.5, 1, 2.2]
+y_pred = [a + b * val for val in x_test]
+
+l = LinearRegression()
+X_reshaped = X.reshape(-1, 1)  # Reshape X to a 2D array
+print(l.fit(X_reshaped, y))
+
+prediction = l.predict(X_reshaped)
+
+plt.plot(X_reshaped, prediction)
+plt.scatter(x_test, y_pred, color="red")
+plt.scatter(X, y, color="orange")
+plt.show()
 ```
 
 Expt 3 logistic regression
